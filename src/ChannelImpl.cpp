@@ -135,8 +135,10 @@ amqp_channel_t ChannelImpl::CreateNewChannel() {
 }
 
 amqp_channel_t ChannelImpl::GetChannel() {
+std::cout << "---> I am at GetChannel start <---" << std::endl;
   if (CS_Open == m_channels.at(m_last_used_channel)) {
     m_channels[m_last_used_channel] = CS_Used;
+std::cout << "---> I am at GetChannel 1 <---" << std::endl;
     return m_last_used_channel;
   }
 
@@ -146,10 +148,12 @@ amqp_channel_t ChannelImpl::GetChannel() {
   if (m_channels.end() == it) {
     amqp_channel_t new_channel = CreateNewChannel();
     m_channels.at(new_channel) = CS_Used;
+std::cout << "---> I am at GetChannel 2 <---" << std::endl;
     return new_channel;
   }
 
   *it = CS_Used;
+std::cout << "---> I am at GetChannel end <---" << std::endl;
   return it - m_channels.begin();
 }
 

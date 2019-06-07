@@ -422,22 +422,23 @@ void Channel::BindQueue(const std::string &queue_name,
                         const Table &arguments) {
   const boost::array<boost::uint32_t, 1> BIND_OK = {
       {AMQP_QUEUE_BIND_OK_METHOD}};
- std::cout << "---> I am at BindQueue 1 <---" << std::endl;
+  std::cout << "---> I am at BindQueue 1 <---" << std::endl;
   m_impl->CheckIsConnected();
- std::cout << "---> I am at BindQueue 2 <---" << std::endl;
+  std::cout << "---> I am at BindQueue 2 <---" << std::endl;
   amqp_queue_bind_t bind = {};
   bind.queue = amqp_cstring_bytes(queue_name.c_str());
   bind.exchange = amqp_cstring_bytes(exchange_name.c_str());
   bind.routing_key = amqp_cstring_bytes(routing_key.c_str());
   bind.nowait = false;
- std::cout << "---> I am at BindQueue 3 <---" << std::endl;
+  std::cout << "---> I am at BindQueue 3 <---" << std::endl;
   Detail::amqp_pool_ptr_t table_pool;
   bind.arguments =
       Detail::TableValueImpl::CreateAmqpTable(arguments, table_pool);
-
+  std::cout << "---> I am at BindQueue 4 <---" << std::endl;
   amqp_frame_t frame = m_impl->DoRpc(AMQP_QUEUE_BIND_METHOD, &bind, BIND_OK);
+  std::cout << "---> I am at BindQueue 5 <---" << std::endl;
   m_impl->MaybeReleaseBuffersOnChannel(frame.channel);
- std::cout << "---> I am at BindQueue 4 <---" << std::endl;
+ std::cout << "---> I am at BindQueue 6 <---" << std::endl;
 }
 
 void Channel::UnbindQueue(const std::string &queue_name,
