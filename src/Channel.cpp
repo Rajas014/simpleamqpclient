@@ -623,12 +623,12 @@ std::string Channel::BasicConsume(const std::string &queue,
                                   bool no_local, bool no_ack, bool exclusive,
                                   boost::uint16_t message_prefetch_count) {
   std::cout << "---> I am at BasicConsume .cpp <---" << std::endl; 
-  //std::cout << "---> queue: " << queue << std::endl; 
-  //std::cout << "---> consumer_tag: " << consumer_tag << std::endl; 
-  //std::cout << "---> no_local: " << no_local << std::endl; 
-  //std::cout << "---> no_ack: " << no_ack << std::endl; 
-  //std::cout << "---> exclusive: " << exclusive << std::endl; 
-  //std::cout << "---> message_prefetch_count: " << unsigned(message_prefetch_count) << std::endl;  
+  std::cout << "---> queue: " << queue << std::endl; 
+  std::cout << "---> consumer_tag: " << consumer_tag << std::endl; 
+  std::cout << "---> no_local: " << no_local << std::endl; 
+  std::cout << "---> no_ack: " << no_ack << std::endl; 
+  std::cout << "---> exclusive: " << exclusive << std::endl; 
+  std::cout << "---> message_prefetch_count: " << unsigned(message_prefetch_count) << std::endl;  
 
   return BasicConsume(queue, consumer_tag, no_local, no_ack, exclusive,
                       message_prefetch_count, Table());
