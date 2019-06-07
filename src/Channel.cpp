@@ -61,6 +61,7 @@
 #include <boost/limits.hpp>
 
 #include <string.h>
+#include <iostream>
 
 namespace AmqpClient {
 

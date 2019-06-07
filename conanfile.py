@@ -17,8 +17,8 @@ class SimpleAmqpClientConan(ConanFile):
                )
 
     def source(self):
-        self.run("git clone https://bitbucket.cashpointservices.at/scm/ext/simpleamqpclient.git")
-        self.run("cd simpleamqpclient && git checkout v%s" % self.version)
+        self.run("git clone https://github.com/Rajas014/simpleamqpclient.git")
+        self.run("cd simpleamqpclient)
         # This small hack might be useful to guarantee proper /MT /MD linkage in MSVC
         # if the packaged project doesn't have variables to set it properly
         tools.replace_in_file("simpleamqpclient/CMakeLists.txt", 'PROJECT(SimpleAmqpClient)', '''PROJECT(SimpleAmqpClient)
