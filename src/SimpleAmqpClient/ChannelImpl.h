@@ -45,6 +45,7 @@
 
 #include <map>
 #include <vector>
+#include <iostream>
 
 namespace AmqpClient {
 namespace Detail {
