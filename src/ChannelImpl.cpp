@@ -50,6 +50,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include <string.h>
+#include <iostream>
 
 namespace AmqpClient {
 namespace Detail {
