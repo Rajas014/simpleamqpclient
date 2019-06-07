@@ -157,6 +157,7 @@ class ChannelImpl : boost::noncopyable {
                           const ResponseListType &expected_responses,
                           boost::chrono::microseconds timeout =
                               boost::chrono::microseconds::max()) {
+    std::cout << "---> I am at GetMethodOnChannel start <---" << std::endl;
     frame_queue_t::iterator desired_frame = std::find_if(
         m_frame_queue.begin(), m_frame_queue.end(),
         boost::bind(
@@ -167,6 +168,7 @@ class ChannelImpl : boost::noncopyable {
     if (m_frame_queue.end() != desired_frame) {
       frame = *desired_frame;
       m_frame_queue.erase(desired_frame);
+      std::cout << "---> I am at GetMethodOnChannel 1 <---" << std::endl;
       return true;
     }
 
@@ -182,6 +184,7 @@ class ChannelImpl : boost::noncopyable {
       if (is_expected_method_on_channel(incoming_frame, channels,
                                         expected_responses)) {
         frame = incoming_frame;
+        std::cout << "---> I am at GetMethodOnChannel 2 <---" << std::endl;
         return true;
       }
       if (AMQP_FRAME_METHOD == incoming_frame.frame_type &&
@@ -192,6 +195,7 @@ class ChannelImpl : boost::noncopyable {
               incoming_frame.payload.method.decoded));
         } catch (AmqpException &) {
           MaybeReleaseBuffersOnChannel(incoming_frame.channel);
+          std::cout << "---> I am at GetMethodOnChannel 3 <---" << std::endl;
           throw;
         }
       }
@@ -201,6 +205,7 @@ class ChannelImpl : boost::noncopyable {
         boost::chrono::steady_clock::time_point now =
             boost::chrono::steady_clock::now();
         if (now >= end_point) {
+          std::cout << "---> I am at GetMethodOnChannel 4 <---" << std::endl;
           return false;
         }
         timeout_left =
@@ -208,6 +213,7 @@ class ChannelImpl : boost::noncopyable {
                 end_point - now);
       }
     }
+    std::cout << "---> I am at GetMethodOnChannel 5 <---" << std::endl;
     return false;
   }
 
@@ -215,12 +221,14 @@ class ChannelImpl : boost::noncopyable {
   amqp_frame_t DoRpcOnChannel(amqp_channel_t channel, boost::uint32_t method_id,
                               void *decoded,
                               const ResponseListType &expected_responses) {
+    std::cout << "---> I am at DoRpcOnChannel start <---" << std::endl;
     CheckForError(amqp_send_method(m_connection, channel, method_id, decoded));
-
+    std::cout << "---> I am at DoRpcOnChannel 1 <---" << std::endl;
     amqp_frame_t response;
     boost::array<amqp_channel_t, 1> channels = {{channel}};
-
+    std::cout << "---> I am at DoRpcOnChannel 2 <---" << std::endl;
     GetMethodOnChannel(channels, response, expected_responses);
+    std::cout << "---> I am at DoRpcOnChannel start <---" << std::endl;
     return response;
   }
 

@@ -137,6 +137,8 @@ amqp_channel_t ChannelImpl::CreateNewChannel() {
 
 amqp_channel_t ChannelImpl::GetChannel() {
 std::cout << "---> I am at GetChannel start <---" << std::endl;
+  std::cout << "---> I am at GetChannel m_last_used_channel: <---" << m_last_used_channel << std::endl;
+
   if (CS_Open == m_channels.at(m_last_used_channel)) {
     m_channels[m_last_used_channel] = CS_Used;
 std::cout << "---> I am at GetChannel 1 <---" << std::endl;
