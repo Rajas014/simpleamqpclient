@@ -210,7 +210,7 @@ void ChannelImpl::CheckRpcReply(amqp_channel_t channel,
 }
 
 void ChannelImpl::CheckForError(int ret) {
-   std::cout << "ret" << ret << endl;
+   std::cout << "ret" << ret << std::endl;
   if (ret < 0) {
     throw AmqpLibraryException::CreateException(ret);
   }
