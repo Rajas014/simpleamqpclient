@@ -408,6 +408,11 @@ void Channel::DeleteQueue(const std::string &queue_name, bool if_unused,
 void Channel::BindQueue(const std::string &queue_name,
                         const std::string &exchange_name,
                         const std::string &routing_key) {
+  std::cout << "---> I am at BindQueue .cpp <---" << std::endl; 
+  std::cout << "---> queue_name: " << queue_name << std::endl; 
+  std::cout << "---> exchange_name: " << exchange_name << std::endl; 
+  std::cout << "---> routing_key: " << routing_key << std::endl; 
+
   BindQueue(queue_name, exchange_name, routing_key, Table());
 }
 
@@ -417,20 +422,22 @@ void Channel::BindQueue(const std::string &queue_name,
                         const Table &arguments) {
   const boost::array<boost::uint32_t, 1> BIND_OK = {
       {AMQP_QUEUE_BIND_OK_METHOD}};
+ std::cout << "---> I am at BindQueue 1 <---" << std::endl;
   m_impl->CheckIsConnected();
-
+ std::cout << "---> I am at BindQueue 2 <---" << std::endl;
   amqp_queue_bind_t bind = {};
   bind.queue = amqp_cstring_bytes(queue_name.c_str());
   bind.exchange = amqp_cstring_bytes(exchange_name.c_str());
   bind.routing_key = amqp_cstring_bytes(routing_key.c_str());
   bind.nowait = false;
-
+ std::cout << "---> I am at BindQueue 3 <---" << std::endl;
   Detail::amqp_pool_ptr_t table_pool;
   bind.arguments =
       Detail::TableValueImpl::CreateAmqpTable(arguments, table_pool);
 
   amqp_frame_t frame = m_impl->DoRpc(AMQP_QUEUE_BIND_METHOD, &bind, BIND_OK);
   m_impl->MaybeReleaseBuffersOnChannel(frame.channel);
+ std::cout << "---> I am at BindQueue 4 <---" << std::endl;
 }
 
 void Channel::UnbindQueue(const std::string &queue_name,
@@ -638,24 +645,26 @@ std::string Channel::BasicConsume(const std::string &queue,
                                   bool no_local, bool no_ack, bool exclusive,
                                   boost::uint16_t message_prefetch_count,
                                   const Table &arguments) {
+  std::cout << "---> I am at BasicConsume 1 <---" << std::endl;
   m_impl->CheckIsConnected();
+  std::cout << "---> I am at BasicConsume 2 <---" << std::endl;
   amqp_channel_t channel = m_impl->GetChannel();
 
   // Set this before starting the consume as it may have been set by a previous
   // consumer
   const boost::array<boost::uint32_t, 1> QOS_OK = {{AMQP_BASIC_QOS_OK_METHOD}};
-
+  std::cout << "---> I am at BasicConsume 3 <---" << std::endl;
   amqp_basic_qos_t qos = {};
   qos.prefetch_size = 0;
   qos.prefetch_count = message_prefetch_count;
   qos.global = m_impl->BrokerHasNewQosBehavior();
-
+  std::cout << "---> I am at BasicConsume 4 <---" << std::endl;
   m_impl->DoRpcOnChannel(channel, AMQP_BASIC_QOS_METHOD, &qos, QOS_OK);
   m_impl->MaybeReleaseBuffersOnChannel(channel);
-
+  std::cout << "---> I am at BasicConsume 5 <---" << std::endl;
   const boost::array<boost::uint32_t, 1> CONSUME_OK = {
       {AMQP_BASIC_CONSUME_OK_METHOD}};
-
+  std::cout << "---> I am at BasicConsume 6 <---" << std::endl;
   amqp_basic_consume_t consume = {};
   consume.queue = amqp_cstring_bytes(queue.c_str());
   consume.consumer_tag = amqp_cstring_bytes(consumer_tag.c_str());
@@ -663,22 +672,22 @@ std::string Channel::BasicConsume(const std::string &queue,
   consume.no_ack = no_ack;
   consume.exclusive = exclusive;
   consume.nowait = false;
-
+  std::cout << "---> I am at BasicConsume 7 <---" << std::endl;
   Detail::amqp_pool_ptr_t table_pool;
   consume.arguments =
       Detail::TableValueImpl::CreateAmqpTable(arguments, table_pool);
-
+  std::cout << "---> I am at BasicConsume 8 <---" << std::endl;
   amqp_frame_t response = m_impl->DoRpcOnChannel(
       channel, AMQP_BASIC_CONSUME_METHOD, &consume, CONSUME_OK);
-
+  std::cout << "---> I am at BasicConsume 9 <---" << std::endl;
   amqp_basic_consume_ok_t *consume_ok =
       (amqp_basic_consume_ok_t *)response.payload.method.decoded;
   std::string tag((char *)consume_ok->consumer_tag.bytes,
                   consume_ok->consumer_tag.len);
   m_impl->MaybeReleaseBuffersOnChannel(channel);
-
+  std::cout << "---> I am at BasicConsume 10 <---" << std::endl;
   m_impl->AddConsumer(tag, channel);
-
+  std::cout << "---> I am at BasicConsume 11 <---" << std::endl;
   return tag;
 }
 
