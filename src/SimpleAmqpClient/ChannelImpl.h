@@ -86,10 +86,14 @@ class ChannelImpl : boost::noncopyable {
     }
 
     amqp_frame_t frame;
-    while (GetNextFrameFromBroker(frame, timeout_left)) {
+    while (GetNextFrameFromBroker(frame, timeout_left))
+    {
+        std::cout << "---> I am at GetNextFrameFromBrokerOnChannel: " << GetNextFrameFromBroker(frame, timeout_left) << std::endl;
+
       if (channels.end() !=
           std::find(channels.begin(), channels.end(), frame.channel)) {
         frame_out = frame;
+          std::cout << "---> I am at GetNextFrameFromBrokerOnChannel: 1" << std::endl;
         return true;
       }
 
@@ -110,6 +114,7 @@ class ChannelImpl : boost::noncopyable {
         boost::chrono::steady_clock::time_point now =
             boost::chrono::steady_clock::now();
         if (now >= end_point) {
+            std::cout << "---> I am at GetNextFrameFromBrokerOnChannel: 2" << std::endl;
           return false;
         }
         timeout_left =
@@ -117,6 +122,7 @@ class ChannelImpl : boost::noncopyable {
                 end_point - now);
       }
     }
+      std::cout << "---> I am at GetNextFrameFromBrokerOnChannel: end" << std::endl;
     return false;
   }
 
@@ -229,7 +235,7 @@ class ChannelImpl : boost::noncopyable {
     boost::array<amqp_channel_t, 1> channels = {{channel}};
     std::cout << "---> I am at DoRpcOnChannel 2 <---" << std::endl;
     GetMethodOnChannel(channels, response, expected_responses);
-    std::cout << "---> I am at DoRpcOnChannel start <---" << std::endl;
+    std::cout << "---> I am at DoRpcOnChannel end <---" << std::endl;
     return response;
   }
 

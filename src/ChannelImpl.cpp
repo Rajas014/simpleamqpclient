@@ -387,6 +387,9 @@ void ChannelImpl::AddToFrameQueue(const amqp_frame_t &frame) {
 
 bool ChannelImpl::GetNextFrameFromBroker(amqp_frame_t &frame,
                                          boost::chrono::microseconds timeout) {
+
+  std::cout << "---> I am at GetNextFrameFromBroker start " << std::endl;
+
   struct timeval *tvp = NULL;
   struct timeval tv_timeout;
   memset(&tv_timeout, 0, sizeof(tv_timeout));
@@ -408,13 +411,15 @@ bool ChannelImpl::GetNextFrameFromBroker(amqp_frame_t &frame,
 
     tvp = &tv_timeout;
   }
-
+  std::cout << "---> I am at GetNextFrameFromBroker 1 " << std::endl;
   int ret = amqp_simple_wait_frame_noblock(m_connection, &frame, tvp);
 
   if (AMQP_STATUS_TIMEOUT == ret) {
+    std::cout << "---> I am at GetNextFrameFromBroker 2 " << std::endl;
     return false;
   }
   CheckForError(ret);
+  std::cout << "---> I am at GetNextFrameFromBroker 3 " << std::endl;
   return true;
 }
 
