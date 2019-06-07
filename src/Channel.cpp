@@ -647,12 +647,17 @@ std::string Channel::BasicConsume(const std::string &queue,
                                   const Table &arguments) {
   std::cout << "---> I am at BasicConsume 1 <---" << std::endl;
   m_impl->CheckIsConnected();
-  std::cout << "---> I am at BasicConsume 2 <---" << std::endl;
+  
   amqp_channel_t channel = m_impl->GetChannel();
-
+  std::cout << "---> I am at BasicConsume 2 <---" << std::endl;
   // Set this before starting the consume as it may have been set by a previous
   // consumer
   const boost::array<boost::uint32_t, 1> QOS_OK = {{AMQP_BASIC_QOS_OK_METHOD}};
+  std::cout << "---> I am at BasicConsume AMQP_BASIC_QOS_OK_METHOD: <---" << << std::endl;
+  for(auto& test: QOS_OK)
+  {
+      std::cout << "QOS_OK: " << test << std::endl;
+  }
   std::cout << "---> I am at BasicConsume 3 <---" << std::endl;
   amqp_basic_qos_t qos = {};
   qos.prefetch_size = 0;
