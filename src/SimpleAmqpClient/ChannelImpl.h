@@ -245,7 +245,6 @@ class ChannelImpl : boost::noncopyable {
   amqp_frame_t DoRpc(boost::uint32_t method_id, void *decoded,
                      const ResponseListType &expected_responses) {
     amqp_channel_t channel = GetChannel();
-    MaybeReleaseBuffersOnChannel(channel);
     amqp_frame_t ret =
         DoRpcOnChannel(channel, method_id, decoded, expected_responses);
     ReturnChannel(channel);
