@@ -435,7 +435,13 @@ void Channel::BindQueue(const std::string &queue_name,
   bind.arguments =
       Detail::TableValueImpl::CreateAmqpTable(arguments, table_pool);
   std::cout << "---> I am at BindQueue 4 <---" << std::endl;
-  amqp_frame_t frame = m_impl->DoRpc(AMQP_QUEUE_BIND_METHOD, &bind, BIND_OK);
+  amqp_channel_t channel = m_impl->GetChannel();
+  std::cout << "---> channel is working <---" << std::endl;
+  amqp_frame_t frame = m_impl->DoRpcOnChannel(channel, AMQP_QUEUE_BIND_METHOD, &bind, BIND_OK);
+
+          //m_impl->DoRpc(AMQP_QUEUE_BIND_METHOD, &bind, BIND_OK);
+
+
   std::cout << "---> I am at BindQueue 5 <---" << std::endl;
   m_impl->MaybeReleaseBuffersOnChannel(frame.channel);
  std::cout << "---> I am at BindQueue 6 <---" << std::endl;
