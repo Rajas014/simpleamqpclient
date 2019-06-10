@@ -88,7 +88,7 @@ class ChannelImpl : boost::noncopyable {
     amqp_frame_t frame;
     while (GetNextFrameFromBroker(frame, timeout_left))
     {
-        std::cout << "---> I am at GetNextFrameFromBrokerOnChannel: " << GetNextFrameFromBroker(frame, timeout_left)  << std::endl;
+        std::cout << "---> I am at GetNextFrameFromBrokerOnChannel while loop" << std::endl;
 
       if (channels.end() !=
           std::find(channels.begin(), channels.end(), frame.channel)) {
