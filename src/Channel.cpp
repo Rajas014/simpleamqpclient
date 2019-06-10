@@ -665,8 +665,7 @@ std::string Channel::BasicConsume(const std::string &queue,
   qos.prefetch_count = message_prefetch_count;
   qos.global = m_impl->BrokerHasNewQosBehavior();
   std::cout << "---> I am at BasicConsume 4 <---" << std::endl;
-  //m_impl->DoRpcOnChannel(channel, AMQP_BASIC_QOS_METHOD, &qos, QOS_OK);
-  m_impl->DoRpc(AMQP_BASIC_QOS_METHOD, &qos, QOS_OK);
+  m_impl->DoRpcOnChannel(channel, AMQP_BASIC_QOS_METHOD, &qos, QOS_OK);
   m_impl->MaybeReleaseBuffersOnChannel(channel);
   std::cout << "---> I am at BasicConsume 5 <---" << std::endl;
   const boost::array<boost::uint32_t, 1> CONSUME_OK = {
@@ -684,9 +683,8 @@ std::string Channel::BasicConsume(const std::string &queue,
   consume.arguments =
       Detail::TableValueImpl::CreateAmqpTable(arguments, table_pool);
   std::cout << "---> I am at BasicConsume 8 <---" << std::endl;
-//  amqp_frame_t response = m_impl->DoRpcOnChannel(
-//      channel, AMQP_BASIC_CONSUME_METHOD, &consume, CONSUME_OK);
-  amqp_frame_t response = m_impl->DoRpc(AMQP_BASIC_CONSUME_METHOD, &consume, CONSUME_OK);
+  amqp_frame_t response = m_impl->DoRpcOnChannel(
+      channel, AMQP_BASIC_CONSUME_METHOD, &consume, CONSUME_OK);
   std::cout << "---> I am at BasicConsume 9 <---" << std::endl;
   amqp_basic_consume_ok_t *consume_ok =
       (amqp_basic_consume_ok_t *)response.payload.method.decoded;
