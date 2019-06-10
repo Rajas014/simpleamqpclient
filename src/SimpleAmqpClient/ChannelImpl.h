@@ -231,7 +231,7 @@ class ChannelImpl : boost::noncopyable {
 
     std::cout << "---> I am at DoRpcOnChannel start <---" << std::endl;
 
-    CheckForError(amqp_send_method(m_connection, channel, method_id, &decoded));
+    CheckForError(amqp_send_method(m_connection, channel, method_id, decoded));
     std::cout << "---> I am at DoRpcOnChannel 1 <---" << std::endl;
     amqp_frame_t response;
     boost::array<amqp_channel_t, 1> channels = {{channel}};
@@ -245,8 +245,9 @@ class ChannelImpl : boost::noncopyable {
   amqp_frame_t DoRpc(boost::uint32_t method_id, void *decoded,
                      const ResponseListType &expected_responses) {
     amqp_channel_t channel = GetChannel();
+    MaybeReleaseBuffersOnChannel(channel);
     amqp_frame_t ret =
-        DoRpcOnChannel(channel, method_id, &decoded, expected_responses);
+        DoRpcOnChannel(channel, method_id, decoded, expected_responses);
     ReturnChannel(channel);
     return ret;
   }
